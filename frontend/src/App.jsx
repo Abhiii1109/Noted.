@@ -6,6 +6,7 @@ import CreateQuoteModal from './components/CreateQuoteModal';
 import FateWheelModal from './components/FateWheelModal';
 import QuoteDetailModal from './components/QuoteDetailModal';
 import Preloader from './components/Preloader';
+import Footer from './components/Footer';
 import {
   fetchQuotesFromApi,
   prefetchNextPage,
@@ -334,6 +335,9 @@ export default function App() {
           onFinish={() => setShowPreloader(false)}
         />
       )}
+
+      {/* Footer with copyright */}
+      <Footer />
     </div>
   );
 }
