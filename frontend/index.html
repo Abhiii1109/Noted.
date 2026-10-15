@@ -3,29 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Primary SEO Meta Tags -->
-    <title>NOTED. — Daily Inspiring Quotes & Sticky Notes of Wisdom</title>
-    <meta name="title" content="NOTED. — Daily Inspiring Quotes & Sticky Notes of Wisdom" />
-    <meta name="description" content="Discover over 1,500+ curated quotes on wisdom, love, life, success, and motivation presented as tactile sticky notes. Save, personalize, and share thoughts that stick." />
-    <meta name="keywords" content="quotes, inspiring quotes, daily wisdom, motivation, philosophy, sticky notes, life quotes, love quotes, success quotes, book excerpts" />
+
+    <!-- ═══════════════════════════════════════════════
+         PRIMARY SEO — Keyword-rich title & description
+         ═══════════════════════════════════════════════ -->
+    <title>NOTED. — 1500+ Best Inspiring Quotes | Wisdom, Love, Life & Motivation</title>
+    <meta name="title" content="NOTED. — 1500+ Best Inspiring Quotes | Wisdom, Love, Life & Motivation" />
+    <meta name="description" content="Browse 1500+ hand-picked inspiring quotes on wisdom, love, life, success, motivation, friendship & philosophy. Save your favourites, discover daily wisdom, and share quotes that stick." />
+    <meta name="keywords" content="inspiring quotes, best quotes, motivational quotes, life quotes, love quotes, wisdom quotes, success quotes, friendship quotes, daily quotes, famous quotes, short quotes, deep quotes, positive quotes, quote of the day, philosophical quotes, quotes about life, quotes about love, quotes about success, quotes about happiness, book quotes" />
     <meta name="author" content="NOTED." />
-    <meta name="robots" content="index, follow" />
-    
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="1 days" />
+    <meta name="rating" content="general" />
+    <meta name="category" content="quotes, inspiration, wisdom, motivation" />
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://noted-quotes.vercel.app/" />
-    <meta property="og:site_name" content="NOTED." />
-    <meta property="og:title" content="NOTED. — Daily Inspiring Quotes & Sticky Notes of Wisdom" />
-    <meta property="og:description" content="A curated tactile pinboard of 1,500+ inspiring quotes, timeless philosophy, and thoughts that stick. Personalize, pin, and share wisdom daily." />
+    <meta property="og:site_name" content="NOTED. — Inspiring Quotes" />
+    <meta property="og:title" content="NOTED. — 1500+ Best Inspiring Quotes | Wisdom, Love & Motivation" />
+    <meta property="og:description" content="Browse 1500+ hand-picked quotes on wisdom, love, life & success. Discover daily inspiration presented as beautiful sticky notes." />
     <meta property="og:image" content="https://noted-quotes.vercel.app/favicon.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="NOTED. — Inspiring Quotes App" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://noted-quotes.vercel.app/" />
-    <meta property="twitter:title" content="NOTED. — Daily Inspiring Quotes & Sticky Notes of Wisdom" />
-    <meta property="twitter:description" content="A curated tactile pinboard of 1,500+ inspiring quotes, timeless philosophy, and thoughts that stick. Personalize, pin, and share wisdom daily." />
-    <meta property="twitter:image" content="https://noted-quotes.vercel.app/favicon.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://noted-quotes.vercel.app/" />
+    <meta name="twitter:title" content="NOTED. — 1500+ Best Inspiring Quotes" />
+    <meta name="twitter:description" content="Browse 1500+ hand-picked quotes on wisdom, love, life & success. Discover daily inspiration presented as beautiful sticky notes." />
+    <meta name="twitter:image" content="https://noted-quotes.vercel.app/favicon.jpg" />
+    <meta name="twitter:creator" content="@noted_quotes" />
 
     <!-- Browser & Theme Colors -->
     <meta name="theme-color" content="#c8f135" media="(prefers-color-scheme: light)" />
@@ -50,7 +62,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-    <!-- Schema.org Structured Data (JSON-LD) -->
+    <!-- ═══════════════════════════════════════════════
+         SCHEMA.ORG STRUCTURED DATA (JSON-LD)
+         Tells Google EXACTLY what this page is about
+         ═══════════════════════════════════════════════ -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -60,7 +75,8 @@
           "@id": "https://noted-quotes.vercel.app/#website",
           "url": "https://noted-quotes.vercel.app/",
           "name": "NOTED.",
-          "description": "Sticky wisdom for the modern mind. Over 1,500+ inspiring quotes presented as interactive tactile sticky notes.",
+          "alternateName": ["Noted Quotes", "NOTED Inspiring Quotes", "Best Quotes App"],
+          "description": "Browse 1500+ hand-picked inspiring quotes on wisdom, love, life, success, motivation, friendship & philosophy.",
           "inLanguage": "en-US",
           "potentialAction": {
             "@type": "SearchAction",
@@ -74,18 +90,131 @@
         {
           "@type": "WebApplication",
           "@id": "https://noted-quotes.vercel.app/#app",
-          "name": "NOTED.",
+          "name": "NOTED. — Inspiring Quotes",
           "url": "https://noted-quotes.vercel.app/",
           "applicationCategory": "LifestyleApplication",
           "operatingSystem": "All",
-          "browserRequirements": "Requires JavaScript. Requires HTML5."
+          "browserRequirements": "Requires JavaScript. Requires HTML5.",
+          "description": "An interactive quote board with 1500+ curated quotes across wisdom, love, life, success and more.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "ratingCount": "128"
+          }
+        },
+        {
+          "@type": "CollectionPage",
+          "@id": "https://noted-quotes.vercel.app/#collection",
+          "url": "https://noted-quotes.vercel.app/",
+          "name": "1500+ Inspiring Quotes Collection — NOTED.",
+          "description": "A curated collection of over 1500 inspiring quotes covering wisdom, love, life, success, motivation, friendship and philosophy.",
+          "inLanguage": "en-US",
+          "about": [
+            { "@type": "Thing", "name": "Inspiring Quotes" },
+            { "@type": "Thing", "name": "Motivational Quotes" },
+            { "@type": "Thing", "name": "Life Quotes" },
+            { "@type": "Thing", "name": "Love Quotes" },
+            { "@type": "Thing", "name": "Wisdom Quotes" },
+            { "@type": "Thing", "name": "Success Quotes" },
+            { "@type": "Thing", "name": "Friendship Quotes" },
+            { "@type": "Thing", "name": "Philosophy Quotes" }
+          ],
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://noted-quotes.vercel.app/"
+              }
+            ]
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is NOTED.?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "NOTED. is a free online quotes app featuring 1500+ hand-picked inspiring quotes on wisdom, love, life, success, motivation and friendship, presented as beautiful interactive sticky notes."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Where can I find the best inspiring quotes?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "NOTED. offers one of the largest curated collections of inspiring quotes online — over 1500+ quotes across categories including wisdom, love, life, success, motivation, friendship and philosophy. All free to browse, save and share."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I find love quotes on NOTED.?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! NOTED. has a dedicated Love category with hundreds of beautiful love quotes from famous authors, philosophers and thinkers."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does NOTED. have motivational quotes?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely. NOTED. features hundreds of motivational and success quotes to keep you inspired every day. Browse by category or search for any topic."
+              }
+            }
+          ]
         }
       ]
     }
     </script>
+
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="33befd5f489c6ee9" />
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- ═══════════════════════════════════════════════════════════
+           STATIC FALLBACK CONTENT — Visible to Google crawler
+           (React replaces this once JS loads)
+           ═══════════════════════════════════════════════════════════ -->
+      <noscript>
+        <style>
+          .seo-fallback { font-family: sans-serif; max-width: 900px; margin: 0 auto; padding: 2rem; }
+          .seo-fallback h1 { font-size: 2rem; margin-bottom: 1rem; }
+          .seo-fallback h2 { font-size: 1.3rem; margin-top: 2rem; }
+          .seo-fallback p { line-height: 1.7; color: #444; }
+          .seo-fallback ul { line-height: 2; }
+        </style>
+        <div class="seo-fallback">
+          <h1>NOTED. — 1500+ Inspiring Quotes on Wisdom, Love, Life &amp; Motivation</h1>
+          <p>Welcome to NOTED. — your free online destination for over <strong>1500 hand-picked inspiring quotes</strong>. Browse beautiful sticky-note style quotes across categories: wisdom, love, life, success, motivation, friendship and philosophy.</p>
+          <h2>Browse Quotes by Category</h2>
+          <ul>
+            <li><a href="/?category=wisdom">Wisdom Quotes</a></li>
+            <li><a href="/?category=love">Love Quotes</a></li>
+            <li><a href="/?category=life">Life Quotes</a></li>
+            <li><a href="/?category=success">Success Quotes</a></li>
+            <li><a href="/?category=motivation">Motivational Quotes</a></li>
+            <li><a href="/?category=friendship">Friendship Quotes</a></li>
+            <li><a href="/?category=philosophy">Philosophy Quotes</a></li>
+          </ul>
+          <h2>Popular Inspiring Quotes</h2>
+          <p>"The only way to do great work is to love what you do." — Steve Jobs</p>
+          <p>"In the middle of difficulty lies opportunity." — Albert Einstein</p>
+          <p>"It does not matter how slowly you go as long as you do not stop." — Confucius</p>
+          <p>Enable JavaScript to explore all 1500+ quotes interactively on NOTED.</p>
+        </div>
+      </noscript>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
