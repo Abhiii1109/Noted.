@@ -151,6 +151,7 @@ export default function QuoteCardStudioModal({
   const [isExporting, setIsExporting] = useState(false);
   const [copiedSuccess, setCopiedSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState('theme'); // 'theme' | 'format' | 'text'
+  const [scaleFactor, setScaleFactor] = useState(0.85);
 
   const cardRef = useRef(null);
   const previewContainerRef = useRef(null);
@@ -198,6 +199,43 @@ export default function QuoteCardStudioModal({
 
   // Current Aspect Ratio config
   const currentRatio = ASPECT_RATIOS.find(r => r.id === aspectRatio) || ASPECT_RATIOS[0];
+
+  // Dynamically calculate the scale to perfectly fit ANY screen (especially mobile) without clipping
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const computeScale = () => {
+      if (!previewContainerRef.current) return;
+      const stageW = previewContainerRef.current.clientWidth;
+      const stageH = previewContainerRef.current.clientHeight;
+      if (!stageW || !stageH) return;
+
+      const targetW = currentRatio.width;
+      const targetH = currentRatio.height;
+      const availW = Math.max(120, stageW - 24);
+      const availH = Math.max(120, stageH - 24);
+
+      const scaleW = availW / targetW;
+      const scaleH = availH / targetH;
+      const bestScale = Math.min(scaleW, scaleH, 0.95);
+      setScaleFactor(Math.max(0.22, Math.min(bestScale, 1.05)));
+    };
+
+    const timer = setTimeout(computeScale, 50);
+    window.addEventListener('resize', computeScale);
+
+    let resizeObserver;
+    if (window.ResizeObserver && previewContainerRef.current) {
+      resizeObserver = new ResizeObserver(computeScale);
+      resizeObserver.observe(previewContainerRef.current);
+    }
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', computeScale);
+      if (resizeObserver) resizeObserver.disconnect();
+    };
+  }, [isOpen, aspectRatio, currentRatio.width, currentRatio.height]);
 
   // Font size multiplier
   const getFontSizeStyle = () => {
@@ -401,7 +439,7 @@ export default function QuoteCardStudioModal({
                   HD EXPORT
                 </span>
               </div>
-              <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', margin: 0, marginTop: '2px' }}>
+              <p className="studio-header-subtitle" style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', margin: 0, marginTop: '2px' }}>
                 Create viral social assets & wallpapers with one click
               </p>
             </div>
@@ -478,46 +516,53 @@ export default function QuoteCardStudioModal({
               <span style={{ color: 'var(--c-lime)' }}>{currentRatio.id}</span>
             </div>
 
-            {/* PREVIEW CONTAINER WITH SCALING TO FIT SCREEN */}
+            {/* PREVIEW CONTAINER WITH DYNAMIC SCALING TO FIT ANY SCREEN */}
             <div
-              className="studio-card-wrapper"
+              className="studio-card-outer"
               style={{
-                width: `${currentRatio.width}px`,
-                height: `${currentRatio.height}px`,
-                maxWidth: '100%',
-                maxHeight: '100%',
+                width: `${Math.round(currentRatio.width * scaleFactor)}px`,
+                height: `${Math.round(currentRatio.height * scaleFactor)}px`,
+                position: 'relative',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                transform: aspectRatio === '9:16'
-                  ? 'scale(0.82)'
-                  : aspectRatio === '16:9'
-                    ? 'scale(0.88)'
-                    : 'scale(0.86)',
-                transformOrigin: 'center center',
-                transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-                boxShadow: '0 25px 60px -15px rgba(0,0,0,0.6)'
+                flexShrink: 0,
+                boxShadow: '0 20px 50px -15px rgba(0,0,0,0.6)',
+                transition: 'width 0.18s ease, height 0.18s ease'
               }}
             >
-              {/* THE TARGET CARD TO RENDER AND EXPORT */}
               <div
-                ref={cardRef}
-                id="studio-export-card"
+                className="studio-card-wrapper"
                 style={{
                   width: `${currentRatio.width}px`,
                   height: `${currentRatio.height}px`,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  padding: theme === 'notebook'
-                    ? (aspectRatio === '16:9' ? '36px 40px 36px 82px' : '44px 38px 44px 84px')
-                    : (aspectRatio === '16:9' ? '36px 48px' : '48px 42px'),
-                  boxSizing: 'border-box',
-                  position: 'relative',
-                  overflow: 'hidden',
-                  ...getThemeContainerStyles(theme, neoColor)
+                  transform: `scale(${scaleFactor})`,
+                  transformOrigin: 'top left',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  transition: 'transform 0.18s cubic-bezier(0.16, 1, 0.3, 1)'
                 }}
               >
+                {/* THE TARGET CARD TO RENDER AND EXPORT */}
+                <div
+                  ref={cardRef}
+                  id="studio-export-card"
+                  style={{
+                    width: `${currentRatio.width}px`,
+                    height: `${currentRatio.height}px`,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    padding: theme === 'notebook'
+                      ? (aspectRatio === '16:9' ? '36px 40px 36px 82px' : '44px 38px 44px 84px')
+                      : (aspectRatio === '16:9' ? '36px 48px' : '48px 42px'),
+                    boxSizing: 'border-box',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    ...getThemeContainerStyles(theme, neoColor)
+                  }}
+                >
                 {/* THEME BACKGROUND ACCENTS */}
                 {renderThemeBackdrop(theme)}
 
@@ -632,6 +677,7 @@ export default function QuoteCardStudioModal({
               </div>
             </div>
           </div>
+        </div>
 
           {/* RIGHT: Control Customizer Panel */}
           <div
@@ -1089,15 +1135,21 @@ export default function QuoteCardStudioModal({
             </div>
 
             {/* Bottom Export Action Footer */}
-            <div style={{
-              padding: '16px 20px',
-              borderTop: 'var(--border-thick)',
-              background: 'var(--bg-main)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '8px',
-              flexShrink: 0
-            }}>
+            <div
+              className="studio-export-footer"
+              style={{
+                padding: '14px 20px',
+                borderTop: 'var(--border-thick)',
+                background: 'var(--bg-main)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+                flexShrink: 0,
+                position: 'sticky',
+                bottom: 0,
+                zIndex: 20
+              }}
+            >
               {/* Primary Download Button */}
               <button
                 id="studio-download-btn"
