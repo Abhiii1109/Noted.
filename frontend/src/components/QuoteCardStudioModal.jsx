@@ -186,17 +186,6 @@ export default function QuoteCardStudioModal({
     };
   }, [isOpen]);
 
-  if (!isOpen || !activeQuote) return null;
-
-  // Shuffle quote
-  const handleShuffleQuote = () => {
-    if (!allQuotes || allQuotes.length === 0) return;
-    const filtered = allQuotes.filter(q => q.id !== activeQuote.id);
-    const pool = filtered.length > 0 ? filtered : allQuotes;
-    const randomQuote = pool[Math.floor(Math.random() * pool.length)];
-    setActiveQuote(randomQuote);
-  };
-
   // Current Aspect Ratio config
   const currentRatio = ASPECT_RATIOS.find(r => r.id === aspectRatio) || ASPECT_RATIOS[0];
 
@@ -236,6 +225,17 @@ export default function QuoteCardStudioModal({
       if (resizeObserver) resizeObserver.disconnect();
     };
   }, [isOpen, aspectRatio, currentRatio.width, currentRatio.height]);
+
+  if (!isOpen || !activeQuote) return null;
+
+  // Shuffle quote
+  const handleShuffleQuote = () => {
+    if (!allQuotes || allQuotes.length === 0) return;
+    const filtered = allQuotes.filter(q => q.id !== activeQuote.id);
+    const pool = filtered.length > 0 ? filtered : allQuotes;
+    const randomQuote = pool[Math.floor(Math.random() * pool.length)];
+    setActiveQuote(randomQuote);
+  };
 
   // Font size multiplier
   const getFontSizeStyle = () => {
