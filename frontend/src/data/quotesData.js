@@ -54,49 +54,84 @@ const writeCache = (key, data) => {
   } catch { /* storage full — skip silently */ }
 };
 
-// Production-ready API Base (supports Vercel/Netlify frontend pointing to Render/Railway backend)
-const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+import { FALLBACK_QUOTES } from './fallbackQuotes';
 
-// ─── FETCH WITH CACHE ─────────────────────────────────────────
-// Returns cached data immediately if available, then refetches in background
-// so the NEXT visit is even faster.
+// Production-ready API Base (auto-sanitizes protocol, trailing slashes, and accidental /api endings)
+const getSanitizedApiBase = () => {
+  let url = (import.meta.env.VITE_API_URL || '').trim();
+  if (!url) return '';
+  if (!/^https?:\/\//i.test(url)) {
+    url = `https://${url}`;
+  }
+  url = url.replace(/\/+$/, '');
+  if (url.endsWith('/api')) {
+    url = url.slice(0, -4);
+  }
+  return url;
+};
+
+const API_BASE = getSanitizedApiBase();
+
+// Filter local fallback quotes if backend is sleeping or unreachable
+const getLocalFallback = (category = '', search = '', page = 1) => {
+  const filtered = FALLBACK_QUOTES.filter(item => {
+    const matchesCategory = !category || category === 'all' || item.category.toLowerCase() === category.toLowerCase();
+    const matchesSearch = !search || 
+      item.quote.toLowerCase().includes(search.toLowerCase()) ||
+      item.author.toLowerCase().includes(search.toLowerCase()) ||
+      item.category.toLowerCase().includes(search.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+  const limit = 30;
+  const start = (page - 1) * limit;
+  return filtered.slice(start, start + limit);
+};
+
+// ─── FETCH WITH CACHE & ZERO-DOWNTIME FALLBACK ────────────────
+// 1. Returns cached quotes immediately if fresh.
+// 2. Tries to fetch live Atlas quotes from API (with 35s timeout for Render cold boots).
+// 3. If API is waking up or fails, gracefully serves fallback quotes so user is NEVER left empty.
 export const fetchQuotesFromApi = async (category = '', search = '', page = 1) => {
   const params = new URLSearchParams();
   if (category && category !== 'all') params.append('category', category);
   if (search) params.append('search', search);
   params.append('page', page);
-  params.append('limit', 30); // 30 per page for rich grid
+  params.append('limit', 30);
 
   const key = getCacheKey(category, search, page);
 
   // 1. Check cache first — return instantly if fresh
   const cached = readCache(key);
 
-  // 2. Always kick off a background fetch to keep cache warm
-  const fetchFresh = () =>
-    fetch(`${API_BASE}/api/quotes?${params.toString()}`, { signal: AbortSignal.timeout(8000) })
-      .then(r => r.ok ? r.json() : null)
-      .then(data => {
-        if (data?.quotes?.length) {
+  // 2. Background fetch to retrieve/refresh live database quotes from Atlas
+  const fetchFresh = async () => {
+    try {
+      // 35s timeout accounts for Render free-tier cold starts without dying prematurely
+      const res = await fetch(`${API_BASE}/api/quotes?${params.toString()}`, { 
+        signal: AbortSignal.timeout(35000) 
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.quotes && data.quotes.length > 0) {
           writeCache(key, data.quotes);
+          return data.quotes;
         }
-        return data?.quotes || [];
-      })
-      .catch(() => []);
+      }
+    } catch (err) {
+      console.warn('API fetch notice (Render may be starting or offline):', err.message);
+    }
+    // Return fallback quotes so user always sees inspiring content
+    return getLocalFallback(category, search, page);
+  };
 
-  if (cached) {
+  if (cached && cached.length > 0) {
     // Return cache immediately (instant!) and silently refresh in background
     fetchFresh();
     return cached;
   }
 
-  // No cache — must wait for real fetch
-  try {
-    const quotes = await fetchFresh();
-    return quotes;
-  } catch {
-    return [];
-  }
+  // No cache — fetch with fallback guarantee
+  return await fetchFresh();
 };
 
 // ─── PREFETCH next page silently ─────────────────────────────

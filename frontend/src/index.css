@@ -1,12 +1,13 @@
 /* NOTED. — STICKY WISDOM FOR THE MODERN MIND */
 
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=JetBrains+Mono:wght@400;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
   --font-display: 'Outfit', -apple-system, sans-serif;
   --font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
   --font-hand: 'Caveat', cursive, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+  --font-serif: 'Playfair Display', Georgia, serif;
 
   /* Curated palette */
   --c-lime: #c8f135;
@@ -1091,3 +1092,70 @@ input:focus, textarea:focus, select:focus {
     max-width: 100%;
   }
 }
+
+/* ═══════════════════════════════════════════════════════
+   QUOTE CARD STUDIO STYLES
+   ═══════════════════════════════════════════════════════ */
+
+.studio-modal-card {
+  animation: studioScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes studioScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.studio-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.studio-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 99px;
+}
+
+[data-theme="dark"] .studio-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 900px) {
+  .studio-modal-card {
+    height: 96vh;
+    max-height: 96vh;
+  }
+
+  .studio-body-layout {
+    flex-direction: column;
+  }
+
+  .studio-stage {
+    padding: 16px 10px !important;
+    min-height: 380px !important;
+    max-height: 46vh !important;
+  }
+
+  .studio-sidebar {
+    width: 100% !important;
+    max-height: 48vh !important;
+    border-left: none !important;
+    border-top: var(--border-thick) !important;
+  }
+
+  .studio-card-wrapper {
+    transform: scale(0.68) !important;
+  }
+}
+
+@media (max-width: 540px) {
+  .studio-card-wrapper {
+    transform: scale(0.55) !important;
+  }
+}
+

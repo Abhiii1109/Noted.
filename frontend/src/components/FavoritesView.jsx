@@ -8,7 +8,8 @@ export default function FavoritesView({
   onTogglePin,
   onUpdateStyle,
   onSelectQuote,
-  onOpenCreate
+  onOpenCreate,
+  onOpenStudio
 }) {
   const pinnedQuotes = quotes.filter(q => q.pinned || q.isCustom);
 
@@ -108,6 +109,7 @@ export default function FavoritesView({
               onTogglePin={onTogglePin}
               onUpdateStyle={onUpdateStyle}
               onSelectQuote={onSelectQuote}
+              onOpenStudio={onOpenStudio}
             />
           ))}
         </div>

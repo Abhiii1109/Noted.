@@ -9,6 +9,7 @@ export default function StickyBoard({
   onTogglePin,
   onUpdateStyle,
   onSelectQuote,
+  onOpenStudio,
   searchQuery,
   setSearchQuery,
   selectedCategory,
@@ -279,6 +280,7 @@ export default function StickyBoard({
               onTogglePin={onTogglePin}
               onUpdateStyle={onUpdateStyle}
               onSelectQuote={onSelectQuote}
+              onOpenStudio={onOpenStudio}
             />
           ))}
         </div>

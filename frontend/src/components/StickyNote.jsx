@@ -8,7 +8,8 @@ import {
   Check,
   Download,
   Palette,
-  Maximize2
+  Maximize2,
+  Sparkles
 } from 'lucide-react';
 import { NOTE_COLORS } from '../data/quotesData';
 import { toPng } from 'html-to-image';
@@ -19,7 +20,8 @@ export default function StickyNote({
   onLike,
   onTogglePin,
   onUpdateStyle,
-  onSelectQuote
+  onSelectQuote,
+  onOpenStudio
 }) {
   const [copied, setCopied] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -313,9 +315,16 @@ export default function StickyNote({
             {copied ? <Check size={11} /> : <Copy size={11} />}
           </button>
 
-          {/* Download */}
+          {/* Card Studio / Export */}
           <button
-            onClick={handleExport}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onOpenStudio) {
+                onOpenStudio(quoteItem);
+              } else {
+                handleExport(e);
+              }
+            }}
             className="note-btn-action"
             style={{
               padding: '5px 7px',
@@ -325,9 +334,9 @@ export default function StickyNote({
               cursor: 'pointer',
               display: 'flex'
             }}
-            title="Download quote card"
+            title="Create visual card / Instagram wallpaper"
           >
-            <Download size={11} />
+            <Sparkles size={11} />
           </button>
 
           {/* Expand */}

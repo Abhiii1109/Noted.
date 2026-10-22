@@ -7,7 +7,8 @@ import {
   Check, 
   Download, 
   Volume2, 
-  VolumeX 
+  VolumeX,
+  Sparkles
 } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import confetti from 'canvas-confetti';
@@ -17,7 +18,8 @@ export default function QuoteDetailModal({
   quoteItem, 
   onClose, 
   onLike, 
-  onTogglePin 
+  onTogglePin,
+  onOpenStudio
 }) {
   const [copied, setCopied] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -221,11 +223,16 @@ export default function QuoteDetailModal({
             </button>
 
             <button
-              onClick={handleExportPng}
-              className="noted-btn btn-mint"
+              onClick={() => {
+                onClose();
+                if (onOpenStudio) onOpenStudio(quoteItem);
+              }}
+              className="noted-btn btn-lime"
+              style={{ fontWeight: 800 }}
+              title="Open full Card Studio to customize ratios & themes"
             >
-              <Download size={15} />
-              <span>Download Art Card</span>
+              <Sparkles size={15} />
+              <span>Card Studio (HD)</span>
             </button>
           </div>
         </div>

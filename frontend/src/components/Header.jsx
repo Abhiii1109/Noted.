@@ -5,7 +5,8 @@ import {
   Sun,
   Moon,
   Pin,
-  Bookmark
+  Bookmark,
+  Sparkles
 } from 'lucide-react';
 
 export default function Header({
@@ -15,6 +16,7 @@ export default function Header({
   setTheme,
   onOpenCreate,
   onRollFate,
+  onOpenStudio,
   pinnedCount,
   totalCount
 }) {
@@ -168,6 +170,16 @@ export default function Header({
 
         {/* Action Buttons */}
         <div className="header-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+          {/* Card Studio */}
+          <button
+            onClick={onOpenStudio}
+            className="noted-btn btn-mint"
+            title="Quote Card Studio (Create Story / Wallpaper / Post)"
+          >
+            <Sparkles size={14} />
+            <span className="btn-label">Studio</span>
+          </button>
+
           {/* Surprise Me */}
           <button
             onClick={onRollFate}

@@ -5,6 +5,7 @@ import FavoritesView from './components/FavoritesView';
 import CreateQuoteModal from './components/CreateQuoteModal';
 import FateWheelModal from './components/FateWheelModal';
 import QuoteDetailModal from './components/QuoteDetailModal';
+import QuoteCardStudioModal from './components/QuoteCardStudioModal';
 import Preloader from './components/Preloader';
 import Footer from './components/Footer';
 import {
@@ -45,6 +46,8 @@ export default function App() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isFateOpen, setIsFateOpen] = useState(false);
   const [selectedQuoteForDetail, setSelectedQuoteForDetail] = useState(null);
+  const [isStudioOpen, setIsStudioOpen] = useState(false);
+  const [studioQuote, setStudioQuote] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
@@ -180,6 +183,18 @@ export default function App() {
     showToast("Sticky note saved to your board! ✨");
   };
 
+  // Open Quote Card Studio
+  const handleOpenStudio = (quote = null) => {
+    if (quote) {
+      setStudioQuote(quote);
+    } else if (displayQuotes.length > 0) {
+      // Pick random quote if not specified
+      const randomIndex = Math.floor(Math.random() * displayQuotes.length);
+      setStudioQuote(displayQuotes[randomIndex]);
+    }
+    setIsStudioOpen(true);
+  };
+
   // Attach personal pinned state to quotes
   const displayQuotes = useMemo(() => {
     return quotes.map(q => ({
@@ -200,6 +215,7 @@ export default function App() {
         setTheme={setTheme}
         onOpenCreate={() => setIsCreateOpen(true)}
         onRollFate={() => setIsFateOpen(true)}
+        onOpenStudio={() => handleOpenStudio()}
         pinnedCount={pinnedCount}
         totalCount={displayQuotes.length}
       />
@@ -213,6 +229,7 @@ export default function App() {
             onTogglePin={handleTogglePin}
             onUpdateStyle={handleUpdateStyle}
             onSelectQuote={setSelectedQuoteForDetail}
+            onOpenStudio={handleOpenStudio}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
             selectedCategory={selectedCategory}
@@ -231,6 +248,7 @@ export default function App() {
             onUpdateStyle={handleUpdateStyle}
             onSelectQuote={setSelectedQuoteForDetail}
             onOpenCreate={() => setIsCreateOpen(true)}
+            onOpenStudio={handleOpenStudio}
           />
         )}
       </main>
@@ -302,6 +320,14 @@ export default function App() {
         onClose={() => setSelectedQuoteForDetail(null)}
         onLike={handleLike}
         onTogglePin={handleTogglePin}
+        onOpenStudio={handleOpenStudio}
+      />
+
+      <QuoteCardStudioModal
+        isOpen={isStudioOpen}
+        onClose={() => setIsStudioOpen(false)}
+        initialQuote={studioQuote || displayQuotes[0]}
+        allQuotes={displayQuotes}
       />
 
       {/* Toast Feedback */}
