@@ -17,6 +17,7 @@ app.use(express.json());
 let isDbConnected = false;
 let memoryQuotes = [...SEED_QUOTES.map((q, idx) => ({ ...q, _id: `mem-${idx + 1}` }))];
 
+
 // Connect to MongoDB Atlas
 const connectDB = async () => {
   if (!MONGODB_URI || MONGODB_URI.includes('username:password')) {
@@ -32,7 +33,7 @@ const connectDB = async () => {
     isDbConnected = true;
     console.log('✅ Connected successfully to MongoDB Atlas!');
 
-    // Auto-seed if collection is empty
+    // Auto-seed quotes if collection is empty
     const count = await Quote.countDocuments();
     if (count === 0) {
       console.log('🌱 Seeding initial quotes into MongoDB Atlas...');
@@ -262,6 +263,10 @@ app.patch('/api/quotes/:id/pin', async (req, res) => {
 
   res.json({ id, pinned: true });
 });
+
+
+
+
 
 app.listen(PORT, () => {
   console.log(`🚀 NOTED API server running at http://localhost:${PORT}`);

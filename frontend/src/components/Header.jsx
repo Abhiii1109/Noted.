@@ -166,18 +166,22 @@ export default function Header({
               </span>
             )}
           </button>
+
+
+
+
         </nav>
 
         {/* Action Buttons */}
         <div className="header-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-          {/* Card Studio */}
+          {/* Get your Card */}
           <button
             onClick={onOpenStudio}
             className="noted-btn btn-mint"
-            title="Quote Card Studio (Create Story / Wallpaper / Post)"
+            title="Get your Card (Story / Wallpaper / Post)"
           >
             <Sparkles size={14} />
-            <span className="btn-label">Studio</span>
+            <span className="btn-label">Get your Card</span>
           </button>
 
           {/* Surprise Me */}

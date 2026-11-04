@@ -315,7 +315,7 @@ export default function StickyNote({
             {copied ? <Check size={11} /> : <Copy size={11} />}
           </button>
 
-          {/* Card Studio / Export */}
+          {/* Get your Card / Export */}
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -334,7 +334,7 @@ export default function StickyNote({
               cursor: 'pointer',
               display: 'flex'
             }}
-            title="Create visual card / Instagram wallpaper"
+            title="Get your Card (Wallpaper / Story)"
           >
             <Sparkles size={11} />
           </button>

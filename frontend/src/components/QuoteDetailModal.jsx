@@ -229,10 +229,10 @@ export default function QuoteDetailModal({
               }}
               className="noted-btn btn-lime"
               style={{ fontWeight: 800 }}
-              title="Open full Card Studio to customize ratios & themes"
+              title="Get your Card to customize ratios & themes"
             >
               <Sparkles size={15} />
-              <span>Card Studio (HD)</span>
+              <span>Get your Card</span>
             </button>
           </div>
         </div>

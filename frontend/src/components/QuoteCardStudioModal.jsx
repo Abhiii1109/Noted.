@@ -105,6 +105,14 @@ const THEMES = [
     previewText: '#16253d'
   },
   {
+    id: 'receipt',
+    name: 'Thermal Receipt',
+    tagline: 'Cash register slip of reality & truth',
+    previewBg: '#f7f6f0',
+    previewBorder: '#1a1a1a',
+    previewText: '#1a1a1a'
+  },
+  {
     id: 'aurora',
     name: 'Aurora Sunset',
     tagline: 'Dreamy glassmorphism glow',
@@ -425,7 +433,7 @@ export default function QuoteCardStudioModal({
                   margin: 0,
                   lineHeight: 1
                 }}>
-                  Quote Card Studio
+                  Get your Card
                 </h2>
                 <span style={{
                   fontSize: '0.65rem',
@@ -556,6 +564,8 @@ export default function QuoteCardStudioModal({
                     justifyContent: 'space-between',
                     padding: theme === 'notebook'
                       ? (aspectRatio === '16:9' ? '36px 40px 36px 82px' : '44px 38px 44px 84px')
+                      : theme === 'receipt'
+                      ? (aspectRatio === '16:9' ? '24px 36px' : '32px 32px')
                       : (aspectRatio === '16:9' ? '36px 48px' : '48px 42px'),
                     boxSizing: 'border-box',
                     position: 'relative',
@@ -591,9 +601,80 @@ export default function QuoteCardStudioModal({
                     {theme === 'swiss' && 'FOLIO. 88'}
                     {theme === 'lofi' && '★ EST. 2026 ★'}
                     {theme === 'notebook' && 'DATE: ___ / ___ / 2026  •  PAGE 01'}
+                    {theme === 'receipt' && 'ORDER #8841-B'}
                     {theme === 'aurora' && '✦ NOTED'}
                   </div>
                 </div>
+
+                {/* THERMAL RECEIPT STORE HEADER */}
+                {theme === 'receipt' && (
+                  <div style={{
+                    position: 'relative',
+                    zIndex: 2,
+                    textAlign: 'center',
+                    marginBottom: '10px',
+                    fontFamily: 'var(--font-mono)',
+                    color: '#1a1a1a'
+                  }}>
+                    <div style={{ fontWeight: 900, fontSize: '0.88rem', letterSpacing: '1px' }}>
+                      ★ NOTED. MART & TRUTH CHECK ★
+                    </div>
+                    <div style={{ fontSize: '0.60rem', color: '#555', marginTop: '2px', letterSpacing: '0.5px' }}>
+                      STORE #4026 • 24/7 EXISTENTIAL CHECKOUT
+                    </div>
+                    <div style={{ fontSize: '0.58rem', color: '#777', marginTop: '1px' }}>
+                      DATE: 2026-11-04  •  REG: 01  •  REF: #8841-B
+                    </div>
+                    <div style={{
+                      borderBottom: '1px dashed #666',
+                      margin: '6px 0 5px 0',
+                      opacity: 0.7
+                    }} />
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      fontSize: '0.60rem',
+                      color: '#444',
+                      fontWeight: 700
+                    }}>
+                      <span>QTY  DESCRIPTION</span>
+                      <span>PRICE</span>
+                    </div>
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      fontSize: '0.58rem',
+                      color: '#222',
+                      marginTop: '2px'
+                    }}>
+                      <span> 1   RAW PERSPECTIVE</span>
+                      <span>$0.00</span>
+                    </div>
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      fontSize: '0.58rem',
+                      color: '#222'
+                    }}>
+                      <span> 1   OVERTHINKING TAX</span>
+                      <span>$99.00</span>
+                    </div>
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      fontSize: '0.58rem',
+                      color: '#222'
+                    }}>
+                      <span> 1   COPING MECHANISM DISCOUNT</span>
+                      <span>-$99.00</span>
+                    </div>
+                    <div style={{
+                      borderBottom: '1px dashed #666',
+                      margin: '5px 0 8px 0',
+                      opacity: 0.7
+                    }} />
+                  </div>
+                )}
 
                 {/* MAIN QUOTE BODY */}
                 <div style={{
@@ -630,7 +711,7 @@ export default function QuoteCardStudioModal({
 
                   {/* Author Attribution */}
                   <div style={{
-                    marginTop: '24px',
+                    marginTop: '20px',
                     display: 'flex',
                     justifyContent: alignment === 'center' ? 'center' : alignment === 'right' ? 'flex-end' : 'flex-start'
                   }}>
@@ -639,6 +720,88 @@ export default function QuoteCardStudioModal({
                     </span>
                   </div>
                 </div>
+
+                {/* THERMAL RECEIPT SUB-TOTAL & BARCODE */}
+                {theme === 'receipt' && (
+                  <div style={{
+                    position: 'relative',
+                    zIndex: 2,
+                    marginTop: '10px',
+                    fontFamily: 'var(--font-mono)',
+                    color: '#1a1a1a'
+                  }}>
+                    <div style={{
+                      borderBottom: '1px dashed #666',
+                      margin: '4px 0 5px 0',
+                      opacity: 0.7
+                    }} />
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      fontSize: '0.68rem',
+                      fontWeight: 900
+                    }}>
+                      <span>TOTAL DUE:</span>
+                      <span>PRICELESS</span>
+                    </div>
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      fontSize: '0.58rem',
+                      color: '#555',
+                      marginTop: '2px'
+                    }}>
+                      <span>PAYMENT METHOD:</span>
+                      <span>WISDOM ACCEPTED</span>
+                    </div>
+
+                    {/* Barcode Graphic */}
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      marginTop: '6px'
+                    }}>
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'stretch',
+                        height: '24px',
+                        gap: '2px',
+                        justifyContent: 'center',
+                        width: '80%',
+                        maxWidth: '220px'
+                      }}>
+                        {[2,1,3,1,4,2,1,2,3,1,2,4,1,2,3,1,4,1,2,3,2,1,3,1,2,4,1,2,1,3,2,1,4,2].map((w, i) => (
+                          <div
+                            key={i}
+                            style={{
+                              width: `${w}px`,
+                              background: i % 2 === 0 ? '#111111' : 'transparent',
+                              flexShrink: 0
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <div style={{
+                        fontSize: '0.56rem',
+                        letterSpacing: '2.5px',
+                        color: '#444',
+                        marginTop: '2px'
+                      }}>
+                        * 2 0 2 6 - N O T E D - T R U T H *
+                      </div>
+                      <div style={{
+                        fontSize: '0.52rem',
+                        color: '#777',
+                        marginTop: '1px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px'
+                      }}>
+                        Thank you for shopping with reality • No returns
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* CARD FOOTER WATERMARK */}
                 {showWatermark && (
@@ -793,6 +956,7 @@ export default function QuoteCardStudioModal({
                             onClick={() => {
                               setTheme(th.id);
                               if (th.id === 'notebook') setFont('hand');
+                              if (th.id === 'receipt') setFont('mono');
                             }}
                             style={{
                               padding: '10px 12px',
@@ -1259,6 +1423,14 @@ function getThemeContainerStyles(theme, neoColor) {
         borderRadius: '3px',
         boxShadow: '0 16px 36px -8px rgba(0,0,0,0.35), 0 2px 6px rgba(0,0,0,0.1)'
       };
+    case 'receipt':
+      return {
+        background: '#f8f7f2',
+        color: '#121212',
+        border: '1px solid #dcd7ca',
+        borderRadius: '2px',
+        boxShadow: '0 16px 36px -8px rgba(0,0,0,0.35), 0 2px 6px rgba(0,0,0,0.1)'
+      };
     case 'aurora':
       return {
         background: 'linear-gradient(135deg, #1b0a2a 0%, #3e1259 40%, #ff5e62 85%, #ff9966 100%)',
@@ -1423,6 +1595,42 @@ function renderThemeBackdrop(theme) {
       </>
     );
   }
+  if (theme === 'receipt') {
+    return (
+      <>
+        {/* Top Scissor Cut Guide */}
+        <div style={{
+          position: 'absolute',
+          top: '10px',
+          left: '18px',
+          right: '18px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.62rem',
+          color: '#888',
+          letterSpacing: '1px',
+          pointerEvents: 'none',
+          zIndex: 1
+        }}>
+          <span>✂</span>
+          <div style={{ flex: 1, borderBottom: '1px dashed #aaa' }} />
+          <span>TEAR HERE</span>
+        </div>
+
+        {/* Paper Faint Grain Texture */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          opacity: 0.035,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+          pointerEvents: 'none',
+          zIndex: 1
+        }} />
+      </>
+    );
+  }
   if (theme === 'aurora') {
     return (
       <div style={{
@@ -1497,6 +1705,17 @@ function getCategoryBadgeStyle(theme, neoColor) {
         letterSpacing: '0.3px',
         borderBottom: '2px solid rgba(251, 192, 45, 0.5)'
       };
+    case 'receipt':
+      return {
+        background: '#000000',
+        color: '#ffffff',
+        fontFamily: 'var(--font-mono)',
+        fontWeight: 800,
+        fontSize: '0.62rem',
+        padding: '2px 8px',
+        borderRadius: '2px',
+        letterSpacing: '0.8px'
+      };
     case 'aurora':
       return {
         background: 'rgba(255,255,255,0.18)',
@@ -1554,6 +1773,14 @@ function getHeaderMarkStyle(theme) {
         color: '#65748a',
         letterSpacing: '0.5px'
       };
+    case 'receipt':
+      return {
+        fontFamily: 'var(--font-mono)',
+        fontWeight: 700,
+        fontSize: '0.66rem',
+        color: '#444444',
+        letterSpacing: '0.5px'
+      };
     case 'aurora':
       return {
         fontFamily: 'var(--font-mono)',
@@ -1581,6 +1808,8 @@ function getQuoteTextColor(theme) {
       return { color: '#2b2118' };
     case 'notebook':
       return { color: '#16253d' };
+    case 'receipt':
+      return { color: '#111111' };
     case 'aurora':
       return {
         color: '#ffffff',
@@ -1648,6 +1877,19 @@ function getAuthorBadgeStyle(theme) {
         borderBottom: '1.5px solid #c2d3e4',
         paddingBottom: '2px'
       };
+    case 'receipt':
+      return {
+        display: 'inline-block',
+        background: '#ebe7dc',
+        color: '#111111',
+        border: '1px dashed #555555',
+        padding: '3px 10px',
+        borderRadius: '2px',
+        fontFamily: 'var(--font-mono)',
+        fontWeight: 800,
+        fontSize: '0.80rem',
+        letterSpacing: '0.4px'
+      };
     case 'aurora':
       return {
         display: 'inline-block',
@@ -1672,6 +1914,7 @@ function getWatermarkBorder(theme) {
     case 'swiss': return '1px solid rgba(0,0,0,0.15)';
     case 'lofi': return '1px dashed #8c7862';
     case 'notebook': return '1px dashed #c0d0df';
+    case 'receipt': return '1px dashed #777777';
     case 'aurora': return '1px solid rgba(255, 255, 255, 0.15)';
     default: return '1px solid rgba(0,0,0,0.1)';
   }
@@ -1684,6 +1927,7 @@ function getWatermarkColor(theme) {
     case 'swiss': return { color: '#555555' };
     case 'lofi': return { color: '#6e5d4c' };
     case 'notebook': return { color: '#65748a' };
+    case 'receipt': return { color: '#444444', fontFamily: 'var(--font-mono)' };
     case 'aurora': return { color: 'rgba(255,255,255,0.85)' };
     default: return { color: 'rgba(0,0,0,0.7)' };
   }
