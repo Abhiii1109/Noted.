@@ -179,14 +179,86 @@ export const createQuoteInApi = async (quoteData) => {
 };
 
 // Like quote in database (fire & forget)
-export const likeQuoteInApi = async (id) => {
+// Helper: update likes count directly inside cached quote pages
+export const updateCachedQuoteLikes = (id, newLikesCount) => {
   try {
-    await fetch(`${API_BASE}/api/quotes/${id}/like`, {
-      method: 'PATCH',
-      signal: AbortSignal.timeout(5000)
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith('noted_cache_')) {
+        const raw = localStorage.getItem(key);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed?.data)) {
+            let modified = false;
+            parsed.data = parsed.data.map(item => {
+              if (item.id === id) {
+                modified = true;
+                return { ...item, likes: newLikesCount };
+              }
+              return item;
+            });
+            if (modified) {
+              localStorage.setItem(key, JSON.stringify(parsed));
+            }
+          }
+        }
+      }
     });
   } catch {}
 };
+
+// Like / Unlike quote in database & synchronize cache
+export const likeQuoteInApi = async (id, action = 'like') => {
+  // 1. Immediately update local cache optimistically so instant refresh has the new likes
+  try {
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith('noted_cache_')) {
+        const raw = localStorage.getItem(key);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed?.data)) {
+            let modified = false;
+            parsed.data = parsed.data.map(item => {
+              if (item.id === id) {
+                modified = true;
+                const cur = item.likes || 0;
+                return {
+                  ...item,
+                  likes: action === 'unlike' ? Math.max(0, cur - 1) : cur + 1
+                };
+              }
+              return item;
+            });
+            if (modified) {
+              localStorage.setItem(key, JSON.stringify(parsed));
+            }
+          }
+        }
+      }
+    });
+  } catch {}
+
+  // 2. Persist to MongoDB API backend
+  try {
+    const res = await fetch(`${API_BASE}/api/quotes/${id}/like`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action }),
+      signal: AbortSignal.timeout(6000)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (typeof data.likes === 'number') {
+        updateCachedQuoteLikes(id, data.likes);
+        return data.likes;
+      }
+    }
+  } catch (err) {
+    console.warn('Could not persist like to backend:', err.message);
+  }
+};
+
+
+
 
 // Toggle pin in database (fire & forget)
 export const pinQuoteInApi = async (id) => {

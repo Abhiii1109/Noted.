@@ -53,6 +53,21 @@ connectDB();
 app.get('/health', (req, res) => res.status(200).send('OK'));
 app.get('/', (req, res) => res.status(200).json({ name: 'NOTED API', status: 'online' }));
 
+// Auto Keep-Alive for Render Free Tier (Pings every 14 mins to prevent 15-min idle sleep)
+const SERVER_URL = process.env.RENDER_EXTERNAL_URL || process.env.BACKEND_URL;
+if (SERVER_URL) {
+  const PING_INTERVAL = 14 * 60 * 1000; // 14 minutes
+  setInterval(async () => {
+    try {
+      const res = await fetch(`${SERVER_URL}/health`);
+      console.log(`🏓 Auto keep-alive ping to ${SERVER_URL}/health [status: ${res.status}]`);
+    } catch (e) {
+      console.warn('⚠️ Keep-alive ping notice:', e.message);
+    }
+  }, PING_INTERVAL);
+  console.log(`⏱️ Auto keep-alive enabled for Render: Pinging ${SERVER_URL}/health every 14 min`);
+}
+
 app.get('/api/status', (req, res) => {
   res.json({
     status: 'online',
@@ -213,15 +228,20 @@ app.post('/api/quotes', async (req, res) => {
 // PATCH /api/quotes/:id/like
 app.patch('/api/quotes/:id/like', async (req, res) => {
   const { id } = req.params;
+  const { action = 'like' } = req.body || {};
   clearServerCache();
 
   if (isDbConnected && mongoose.Types.ObjectId.isValid(id)) {
     try {
       const quote = await Quote.findById(id);
       if (quote) {
-        quote.likes += 1;
+        if (action === 'unlike') {
+          quote.likes = Math.max(0, (quote.likes || 1) - 1);
+        } else {
+          quote.likes = (quote.likes || 0) + 1;
+        }
         await quote.save();
-        return res.json({ id: quote._id, likes: quote.likes });
+        return res.json({ id: quote._id.toString(), likes: quote.likes });
       }
     } catch (err) {
       console.error('Error liking quote in MongoDB:', err);
@@ -230,7 +250,11 @@ app.patch('/api/quotes/:id/like', async (req, res) => {
 
   const q = memoryQuotes.find(item => item._id === id);
   if (q) {
-    q.likes = (q.likes || 0) + 1;
+    if (action === 'unlike') {
+      q.likes = Math.max(0, (q.likes || 1) - 1);
+    } else {
+      q.likes = (q.likes || 0) + 1;
+    }
     return res.json({ id: q._id, likes: q.likes });
   }
 

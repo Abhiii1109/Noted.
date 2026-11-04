@@ -40,6 +40,16 @@ export default function App() {
     }
   });
 
+  // User-specific liked quotes stored in browser localStorage
+  const [likedIds, setLikedIds] = useState(() => {
+    try {
+      const saved = localStorage.getItem('noted_liked_ids');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
@@ -63,6 +73,13 @@ export default function App() {
       localStorage.setItem('noted_pinned_ids', JSON.stringify(pinnedIds));
     } catch { }
   }, [pinnedIds]);
+
+  // Persist user's personal liked quotes
+  useEffect(() => {
+    try {
+      localStorage.setItem('noted_liked_ids', JSON.stringify(likedIds));
+    } catch { }
+  }, [likedIds]);
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -139,20 +156,31 @@ export default function App() {
     }
   };
 
-  // Like
+  // Like / Unlike with personal state persistence & database sync
   const handleLike = (id) => {
+    const isCurrentlyLiked = likedIds.includes(id);
+    const action = isCurrentlyLiked ? 'unlike' : 'like';
+
+    setLikedIds(prev => {
+      if (isCurrentlyLiked) {
+        return prev.filter(pId => pId !== id);
+      } else {
+        return [...prev, id];
+      }
+    });
+
     setQuotes(prev => prev.map(q => {
       if (q.id === id) {
-        const liked = !q.liked;
         return {
           ...q,
-          liked,
-          likes: liked ? (q.likes || 0) + 1 : Math.max(0, (q.likes || 1) - 1)
+          liked: !isCurrentlyLiked,
+          likes: isCurrentlyLiked ? Math.max(0, (q.likes || 1) - 1) : (q.likes || 0) + 1
         };
       }
       return q;
     }));
-    likeQuoteInApi(id);
+
+    likeQuoteInApi(id, action);
   };
 
   // Personal Pin Toggle — completely user-specific via localStorage
@@ -195,13 +223,14 @@ export default function App() {
     setIsStudioOpen(true);
   };
 
-  // Attach personal pinned state to quotes
+  // Attach personal pinned and liked state to quotes
   const displayQuotes = useMemo(() => {
     return quotes.map(q => ({
       ...q,
-      pinned: pinnedIds.includes(q.id)
+      pinned: pinnedIds.includes(q.id),
+      liked: likedIds.includes(q.id)
     }));
-  }, [quotes, pinnedIds]);
+  }, [quotes, pinnedIds, likedIds]);
 
   const pinnedCount = displayQuotes.filter(q => q.pinned).length;
 
@@ -315,7 +344,8 @@ export default function App() {
       <QuoteDetailModal
         quoteItem={selectedQuoteForDetail ? {
           ...selectedQuoteForDetail,
-          pinned: pinnedIds.includes(selectedQuoteForDetail.id)
+          pinned: pinnedIds.includes(selectedQuoteForDetail.id),
+          liked: likedIds.includes(selectedQuoteForDetail.id)
         } : null}
         onClose={() => setSelectedQuoteForDetail(null)}
         onLike={handleLike}
