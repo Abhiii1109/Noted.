@@ -12,9 +12,17 @@ import {
   fetchQuotesFromApi,
   prefetchNextPage,
   createQuoteInApi,
-  likeQuoteInApi
+  likeQuoteInApi,
+  invalidateQuoteCache
 } from './data/quotesData';
 import confetti from 'canvas-confetti';
+
+// One-time cache purge to clear any stale pinned:true data from old API responses
+const CACHE_PURGE_KEY = 'noted_pin_fix_v1';
+if (!localStorage.getItem(CACHE_PURGE_KEY)) {
+  invalidateQuoteCache();
+  localStorage.setItem(CACHE_PURGE_KEY, '1');
+}
 
 export default function App() {
   const [theme, setTheme] = useState(() => {

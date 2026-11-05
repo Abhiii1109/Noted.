@@ -260,15 +260,8 @@ export const likeQuoteInApi = async (id, action = 'like') => {
 
 
 
-// Toggle pin in database (fire & forget)
-export const pinQuoteInApi = async (id) => {
-  try {
-    await fetch(`${API_BASE}/api/quotes/${id}/pin`, {
-      method: 'PATCH',
-      signal: AbortSignal.timeout(5000)
-    });
-  } catch {}
-};
+// Pin is 100% client-side via localStorage — no backend call needed
+export const pinQuoteInApi = async (id) => {};
 
 // Check DB connection status
 export const checkDatabaseStatus = async () => {

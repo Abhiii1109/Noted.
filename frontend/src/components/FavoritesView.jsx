@@ -11,7 +11,7 @@ export default function FavoritesView({
   onOpenCreate,
   onOpenStudio
 }) {
-  const pinnedQuotes = quotes.filter(q => q.pinned || q.isCustom);
+  const pinnedQuotes = quotes.filter(q => q.pinned);
 
   return (
     <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '32px 24px' }}>

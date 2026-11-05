@@ -130,7 +130,7 @@ app.get('/api/quotes', async (req, res) => {
           colorId: q.colorId,
           rotation: q.rotation,
           tag: q.tag,
-          pinned: q.pinned,
+          pinned: false,
           likes: q.likes,
           isCustom: q.isCustom
         })),
@@ -171,7 +171,7 @@ app.get('/api/quotes', async (req, res) => {
       colorId: q.colorId,
       rotation: q.rotation,
       tag: q.tag,
-      pinned: q.pinned,
+      pinned: false,
       likes: q.likes,
       isCustom: q.isCustom
     })),
@@ -198,7 +198,7 @@ app.post('/api/quotes', async (req, res) => {
     colorId: colorId || 'lime',
     rotation: Number(((Math.random() * 3.4) - 1.7).toFixed(1)),
     tag: tag || (category ? category.toUpperCase() : 'WISDOM'),
-    pinned: true,
+    pinned: false,
     likes: 1,
     isCustom: true
   };
@@ -261,31 +261,9 @@ app.patch('/api/quotes/:id/like', async (req, res) => {
   res.json({ id, likes: 1 });
 });
 
-// PATCH /api/quotes/:id/pin
-app.patch('/api/quotes/:id/pin', async (req, res) => {
-  const { id } = req.params;
-  clearServerCache();
-
-  if (isDbConnected && mongoose.Types.ObjectId.isValid(id)) {
-    try {
-      const quote = await Quote.findById(id);
-      if (quote) {
-        quote.pinned = !quote.pinned;
-        await quote.save();
-        return res.json({ id: quote._id, pinned: quote.pinned });
-      }
-    } catch (err) {
-      console.error('Error toggling pin in MongoDB:', err);
-    }
-  }
-
-  const q = memoryQuotes.find(item => item._id === id);
-  if (q) {
-    q.pinned = !q.pinned;
-    return res.json({ id: q._id, pinned: q.pinned });
-  }
-
-  res.json({ id, pinned: true });
+// PATCH /api/quotes/:id/pin — no-op, pinning is 100% client-side via localStorage
+app.patch('/api/quotes/:id/pin', (req, res) => {
+  res.json({ id: req.params.id, pinned: false });
 });
 
 
